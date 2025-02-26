@@ -39,7 +39,8 @@ class Game
     office.AddExit("west", lab);
 
     // Create your Items here
-    // ...
+    Item knife = new Item(10, "A very big knife.");
+    Item axe = new Item(20, "A very very big axe.");
     // And add them to the Rooms
     // ...
 
