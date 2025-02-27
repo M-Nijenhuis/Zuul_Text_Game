@@ -42,7 +42,7 @@ class Game
     Item knife = new Item(10, "A very big knife.");
     Item axe = new Item(20, "A very very big axe.");
     // And add them to the Rooms
-    // ...
+    outside.Chest.GetItem("knife", knife);
 
     // Start game outside
     player.CurrentRoom = outside;
@@ -157,6 +157,7 @@ class Game
   private void Look()
   {
     Console.WriteLine($"{player.CurrentRoom.GetLongDescription()}");
+    Console.WriteLine(player.CurrentRoom.Chest.Show());
   }
 
   private void Status()
