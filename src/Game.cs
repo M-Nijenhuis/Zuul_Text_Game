@@ -42,7 +42,8 @@ class Game
     Item knife = new Item(10, "A very big knife.");
     Item axe = new Item(20, "A very very big axe.");
     // And add them to the Rooms
-    outside.Chest.GetItem("knife", knife);
+    outside.Chest.Put("knife", knife);
+    outside.Chest.Put("axe", axe);
 
     // Start game outside
     player.CurrentRoom = outside;
@@ -107,6 +108,12 @@ class Game
       case "status":
         Status();
         break;
+      case "take":
+        Take(command);
+        break;
+      case "drop":
+        Drop(command);
+        break;
     }
 
     return wantToQuit;
@@ -153,16 +160,48 @@ class Game
     player.Damage(10);
   }
 
+  private void Take(Command command)
+  {
+    if(!command.HasSecondWord()) 
+    {
+      Console.WriteLine("What item?");
+    }
+    else
+    {
+      string itemName = command.SecondWord;
+      player.TakeFromChest(itemName);
+    }
+
+  }
+
+  private void Drop(Command command)
+  {
+    if(!command.HasSecondWord())
+    {
+      Console.WriteLine("What item?");
+    }
+    else
+    {
+      string itemName = command.SecondWord;
+      player.DropToChest(itemName);
+    }
+     
+  }
+
 
   private void Look()
   {
     Console.WriteLine($"{player.CurrentRoom.GetLongDescription()}");
+    Console.WriteLine("-----------------");
+
     Console.WriteLine(player.CurrentRoom.Chest.Show());
   }
 
   private void Status()
   {
     Console.WriteLine($"You're health is {player.health}/100");
+    Console.WriteLine("-----------------");
+    Console.WriteLine(player.backpack.Show());
   }
 }
 

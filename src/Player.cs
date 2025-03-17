@@ -4,7 +4,7 @@ class Player
 
   //Private fields
   private const int _maxHealth = 100;
-  private Inventory backpack;
+  public Inventory backpack;
 
   //Public Fields
   public int health;
@@ -41,15 +41,17 @@ class Player
 
   public bool TakeFromChest(string itemName)
   {
-    Item item = CurrentRoom.Chest.RemoveItem(itemName); 
+    Item item = CurrentRoom.Chest.Get(itemName); 
+    Console.WriteLine(item);
 
-    if(backpack.GetItem(itemName, item) == true)
+    if(backpack.Put(itemName, item) == true)
     {
       Console.WriteLine($"The {itemName} is put in youre backpack.");
       return true;
     }
 
-    CurrentRoom.Chest.GetItem(itemName, item);
+    Console.WriteLine("Het is niet gelykt!");
+    CurrentRoom.Chest.Put(itemName, item);
     Console.WriteLine($"The {itemName} does not fit in youre backpack.");
 
 
@@ -59,9 +61,9 @@ class Player
   public bool DropToChest(string itemName)
   {
     
-    Item item = backpack.RemoveItem(itemName);
+    Item item = backpack.Get(itemName);
 
-    if (CurrentRoom.Chest.GetItem(itemName, item) == true)
+    if (CurrentRoom.Chest.Put(itemName, item) == true)
     {
       Console.WriteLine($"The {itemName} is droped in the room");
       return true;

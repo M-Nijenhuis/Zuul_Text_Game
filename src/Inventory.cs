@@ -12,7 +12,7 @@ class Inventory
   }
 
   //Methods
-  public bool GetItem(string itemName, Item item)
+  public bool Put(string itemName, Item item)
   {
     //TODO implement:
     //Check the weight of the Item and check for enough space in the inventory
@@ -28,7 +28,7 @@ class Inventory
     return false;
   }
 
-  public Item RemoveItem(string itemName)
+  public Item Get(string itemName)
   {
     foreach(KeyValuePair<string, Item> item in items)
     {
@@ -62,15 +62,22 @@ class Inventory
     return maxWeight -= GetTotalWeight();
   }
 
+
   public string Show()
   {
+    string allItems = "";
 
-    foreach (KeyValuePair<string, Item> item in items) 
+    if (items.Count != 0)
     {
-      return item.Key;
+      foreach (KeyValuePair<string, Item> item in items) 
+      {
+        allItems += item.Key + ", "; 
+      }
+      return allItems;
     }
 
-    return "There is nothing found";
+    return "There is nothing found in the Inventory";
+
   }
 
 }
