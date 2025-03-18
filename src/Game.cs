@@ -40,7 +40,7 @@ class Game
 
     // Create your Items here
     Item knife = new Item(10, "A very big knife.");
-    Item axe = new Item(20, "A very very big axe.");
+    Item axe = new Item(5, "A very very big axe.");
     // And add them to the Rooms
     outside.Chest.Put("knife", knife);
     outside.Chest.Put("axe", axe);
@@ -113,6 +113,9 @@ class Game
         break;
       case "drop":
         Drop(command);
+        break;
+      case "use":
+        Use(command);
         break;
     }
 
@@ -188,6 +191,11 @@ class Game
      
   }
 
+  private void Use(Command command)
+  {
+
+  }
+
 
   private void Look()
   {
@@ -199,9 +207,9 @@ class Game
 
   private void Status()
   {
-    Console.WriteLine($"You're health is {player.health}/100");
+    Console.WriteLine($"Your health is {player.health}/100");
     Console.WriteLine("-----------------");
-    Console.WriteLine(player.backpack.Show());
+    Console.WriteLine("Your inventory: " + string.Join(", ", player.backpack.ListItems()));
   }
 }
 

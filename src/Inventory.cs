@@ -30,9 +30,9 @@ class Inventory
 
   public Item Get(string itemName)
   {
-    foreach(KeyValuePair<string, Item> item in items)
+    foreach (KeyValuePair<string, Item> item in items)
     {
-      if(item.Key == itemName)
+      if (item.Key == itemName)
       {
         items.Remove(itemName);
         return item.Value;
@@ -46,7 +46,7 @@ class Inventory
   {
     int total = 0;
 
-    foreach (KeyValuePair<string, Item> item in items) 
+    foreach (KeyValuePair<string, Item> item in items)
     {
       int itemWeight = item.Value.Weight;
       total += itemWeight;
@@ -62,21 +62,21 @@ class Inventory
     return maxWeight -= GetTotalWeight();
   }
 
+  public List<string> ListItems()
+  {
+    return new List<string>(items.Keys);
+  }
 
   public string Show()
   {
     string allItems = "";
 
-    if (items.Count != 0)
+    foreach (var itemName in ListItems())
     {
-      foreach (KeyValuePair<string, Item> item in items) 
-      {
-        allItems += item.Key + ", "; 
-      }
-      return allItems;
+      allItems += itemName + " ";
     }
 
-    return "There is nothing found in the Inventory";
+    return allItems;
 
   }
 

@@ -46,13 +46,12 @@ class Player
 
     if(backpack.Put(itemName, item) == true)
     {
-      Console.WriteLine($"The {itemName} is put in youre backpack.");
+      Console.WriteLine($"The {itemName} is put in to your backpack.");
       return true;
     }
 
-    Console.WriteLine("Het is niet gelykt!");
     CurrentRoom.Chest.Put(itemName, item);
-    Console.WriteLine($"The {itemName} does not fit in youre backpack.");
+    Console.WriteLine($"The {itemName} does not fit in your backpack.");
 
 
     return false; 
@@ -70,5 +69,10 @@ class Player
     }
 
     return false;
+  }
+
+  public string Use(string itemName)
+  {
+    return null;
   }
 }
