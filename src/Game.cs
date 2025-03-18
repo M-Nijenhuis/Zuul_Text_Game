@@ -18,32 +18,54 @@ class Game
   private void CreateRooms()
   {
     // Create the rooms
-    Room outside = new Room("outside the main entrance of the university");
-    Room theatre = new Room("in a lecture theatre");
-    Room pub = new Room("in the campus pub");
-    Room lab = new Room("in a computing lab");
-    Room office = new Room("in the computing admin office");
+    Room outside = new Room("outside the main entrance of the garage");
+    Room garageHall = new Room("in a the garage hall");
+    Room breakRoom = new Room("in the break room");
+    Room toolsRoom = new Room("in a tool room");
+    Room storageRoom = new Room("in the storage room");
+    Room smallOffice = new Room("in a small office");
+    Room garage = new Room("in the garage");
+    Room sewer = new Room("in the sewer under the road");
+    Room furtherSewer = new Room("futher in the sewer");
 
     // Initialise room exits
-    outside.AddExit("east", theatre);
-    outside.AddExit("south", lab);
-    outside.AddExit("west", pub);
+    outside.AddExit("north", garageHall);
+    outside.AddExit("down", sewer);
+    
+    sewer.AddExit("up", outside);
+    sewer.AddExit("north", furtherSewer);
 
-    theatre.AddExit("west", outside);
+    furtherSewer.AddExit("up", garage);
 
-    pub.AddExit("east", outside);
+    garageHall.AddExit("west", breakRoom);
+    garageHall.AddExit("east", smallOffice);
+    garageHall.AddExit("north", garage);
+    garageHall.AddExit("south", outside);
 
-    lab.AddExit("north", outside);
-    lab.AddExit("east", office);
+    breakRoom.AddExit("east", garageHall);
+    smallOffice.AddExit("west", garageHall);
 
-    office.AddExit("west", lab);
+    garage.AddExit("south", garageHall);
+    garage.AddExit("west", toolsRoom);
+    garage.AddExit("east", storageRoom);
+
+    toolsRoom.AddExit("east", garage);
+    storageRoom.AddExit("west", garage);
+
 
     // Create your Items here
     Item knife = new Item(10, "A very big knife.");
     Item axe = new Item(5, "A very very big axe.");
+    Item entranceKey = new Item(2, "The key for the garage hall");
+    Item storageKey = new Item(2, "The key for the storage room");
+    Item medkit = new Item(5, "A medkit to get your health fixed");
+
     // And add them to the Rooms
-    outside.Chest.Put("knife", knife);
-    outside.Chest.Put("axe", axe);
+    sewer.Chest.Put("knife", knife);
+    toolsRoom.Chest.Put("axe", axe);
+    outside.Chest.Put("entranceKey", entranceKey);
+    breakRoom.Chest.Put("storageKey", storageKey);
+    breakRoom.Chest.Put("medkit", medkit);
 
     // Start game outside
     player.CurrentRoom = outside;
@@ -115,7 +137,7 @@ class Game
         Drop(command);
         break;
       case "use":
-        Use(command);
+        UseItem(command);
         break;
     }
 
@@ -191,9 +213,16 @@ class Game
      
   }
 
-  private void Use(Command command)
+  private void UseItem(Command command)
   {
-
+    if (command.HasSecondWord()) 
+    {
+      player.Use(command.SecondWord);
+    }
+    else 
+    {
+      Console.WriteLine("Use what?");
+    }
   }
 
 
@@ -201,8 +230,10 @@ class Game
   {
     Console.ForegroundColor = ConsoleColor.DarkCyan;
     Console.WriteLine($"{player.CurrentRoom.GetLongDescription()}");
-    Console.WriteLine("-----------------");
+    Console.ForegroundColor = ConsoleColor.White;
+    Console.WriteLine("----------------------");
 
+    Console.ForegroundColor = ConsoleColor.Blue;
     Console.WriteLine("This items are in the room: " + string.Join(", ", player.CurrentRoom.Chest.ListItems()));
     Console.ResetColor();
   }
@@ -211,7 +242,9 @@ class Game
   {
     Console.ForegroundColor = ConsoleColor.DarkGreen;
     Console.WriteLine($"Your health is {player.health}/100");
-    Console.WriteLine("-----------------");
+    Console.ForegroundColor = ConsoleColor.White;
+    Console.WriteLine("----------------------");
+    Console.ForegroundColor = ConsoleColor.Blue;
     Console.WriteLine("Your inventory: " + string.Join(", ", player.backpack.ListItems()));
     Console.ResetColor();
   }

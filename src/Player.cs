@@ -28,6 +28,12 @@ class Player
   public void Heal(int amount) 
   {
     health += amount;
+    if (health > 100)
+    {
+      health = _maxHealth;
+    }
+
+    Console.WriteLine($"Your health is now ${health}/{_maxHealth}");
   }
 
   public bool IsAlive()
@@ -45,10 +51,11 @@ class Player
 
     if (item != null)
     {
-      Console.WriteLine(item);
       if(backpack.Put(itemName, item) == true)
       {
+        Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine($"The {itemName} is put in to your backpack.");
+        Console.ResetColor();
         return true;
       }
 
@@ -81,6 +88,54 @@ class Player
 
   public string Use(string itemName)
   {
+    switch (itemName)
+    {
+      case "knife":
+        UseKnife();
+        return itemName;
+      case "axe":
+        UseAxe();
+        return itemName;
+      case "medkit":
+        UseMetkit(itemName);
+        return itemName;
+      case "entrancekey":
+        UseKey(itemName);
+        return itemName;
+    }
+
     return null;
   }
+
+  private void UseKey(string itemName)
+  {
+     
+  }
+
+  private void UseKnife() 
+  {
+    Damage(40);
+    Console.WriteLine("You stabed yourself! Seek a medkit fast!");
+  }
+
+  private void UseAxe() 
+  {
+    Console.WriteLine("balbalablba");
+  }
+
+  private void UseMetkit(string itemName) 
+  {
+    backpack.Get(itemName);
+    Heal(30);
+  }
 }
+
+
+
+
+
+
+
+
+
+
