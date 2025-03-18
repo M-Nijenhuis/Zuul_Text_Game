@@ -76,7 +76,7 @@ class Inventory
       allItems += itemName + " ";
     }
 
-    return allItems;
+    return "There is nothing found in the Inventory";
 
   }
 

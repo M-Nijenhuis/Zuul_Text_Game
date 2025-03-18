@@ -42,17 +42,25 @@ class Player
   public bool TakeFromChest(string itemName)
   {
     Item item = CurrentRoom.Chest.Get(itemName); 
-    Console.WriteLine(item);
 
-    if(backpack.Put(itemName, item) == true)
+    if (item != null)
     {
-      Console.WriteLine($"The {itemName} is put in to your backpack.");
-      return true;
+      Console.WriteLine(item);
+      if(backpack.Put(itemName, item) == true)
+      {
+        Console.WriteLine($"The {itemName} is put in to your backpack.");
+        return true;
+      }
+
+      CurrentRoom.Chest.Put(itemName, item);
+      Console.WriteLine($"The {itemName} does not fit in your backpack.");
     }
-
-    CurrentRoom.Chest.Put(itemName, item);
-    Console.WriteLine($"The {itemName} does not fit in your backpack.");
-
+    else
+    {
+      Console.ForegroundColor = ConsoleColor.Red;
+      Console.WriteLine("The thing you want to pick up does not exist");
+      Console.ResetColor();
+    }
 
     return false; 
   }

@@ -199,17 +199,21 @@ class Game
 
   private void Look()
   {
+    Console.ForegroundColor = ConsoleColor.DarkCyan;
     Console.WriteLine($"{player.CurrentRoom.GetLongDescription()}");
     Console.WriteLine("-----------------");
 
-    Console.WriteLine(player.CurrentRoom.Chest.Show());
+    Console.WriteLine("This items are in the room: " + string.Join(", ", player.CurrentRoom.Chest.ListItems()));
+    Console.ResetColor();
   }
 
   private void Status()
   {
+    Console.ForegroundColor = ConsoleColor.DarkGreen;
     Console.WriteLine($"Your health is {player.health}/100");
     Console.WriteLine("-----------------");
     Console.WriteLine("Your inventory: " + string.Join(", ", player.backpack.ListItems()));
+    Console.ResetColor();
   }
 }
 
