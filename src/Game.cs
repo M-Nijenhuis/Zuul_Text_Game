@@ -170,6 +170,7 @@ class Game
       return;
     }
 
+
     string direction = command.SecondWord;
 
     // Try to go to the next room.
@@ -183,6 +184,13 @@ class Game
     player.CurrentRoom = nextRoom;
     Console.WriteLine(player.CurrentRoom.GetLongDescription());
     player.Damage(10);
+
+    if(player.health == 30)
+    {
+      Console.ForegroundColor = ConsoleColor.Red;
+      Console.WriteLine("You are low on health, find a way to heal as fast as possible!");
+      Console.ResetColor();
+    }
   }
 
   private void Take(Command command)

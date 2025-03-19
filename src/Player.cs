@@ -10,7 +10,7 @@ class Player
   public int health;
 
 
-  public Player() 
+  public Player()
   {
     CurrentRoom = null;
     health = 100;
@@ -25,7 +25,7 @@ class Player
     health -= amount;
   }
 
-  public void Heal(int amount) 
+  public void Heal(int amount)
   {
     health += amount;
     if (health > 100)
@@ -33,12 +33,15 @@ class Player
       health = _maxHealth;
     }
 
-    Console.WriteLine($"Your health is now ${health}/{_maxHealth}");
+    Console.ForegroundColor = ConsoleColor.Green;
+    Console.WriteLine($"Your health is now {health}/{_maxHealth}");
+    Console.ResetColor();
   }
 
   public bool IsAlive()
   {
-    if (health <= 0) {
+    if (health <= 0)
+    {
       return false;
     }
 
@@ -47,11 +50,11 @@ class Player
 
   public bool TakeFromChest(string itemName)
   {
-    Item item = CurrentRoom.Chest.Get(itemName); 
+    Item item = CurrentRoom.Chest.Get(itemName);
 
     if (item != null)
     {
-      if(backpack.Put(itemName, item) == true)
+      if (backpack.Put(itemName, item) == true)
       {
         Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine($"The {itemName} is put in to your backpack.");
@@ -69,12 +72,12 @@ class Player
       Console.ResetColor();
     }
 
-    return false; 
+    return false;
   }
 
   public bool DropToChest(string itemName)
   {
-    
+
     Item item = backpack.Get(itemName);
 
     if (CurrentRoom.Chest.Put(itemName, item) == true)
@@ -88,20 +91,28 @@ class Player
 
   public string Use(string itemName)
   {
-    switch (itemName)
+
+    if(backpack.CheckIfItemIsAvailible(itemName) == true)
     {
-      case "knife":
-        UseKnife();
-        return itemName;
-      case "axe":
-        UseAxe();
-        return itemName;
-      case "medkit":
-        UseMetkit(itemName);
-        return itemName;
-      case "entrancekey":
-        UseKey(itemName);
-        return itemName;
+      switch (itemName)
+      {
+        case "knife":
+          UseKnife();
+          return itemName;
+        case "axe":
+          UseAxe();
+          return itemName;
+        case "medkit":
+          UseMetkit(itemName);
+          return itemName;
+        case "entrancekey":
+          UseKey(itemName);
+          return itemName;
+      }
+    }
+    else
+    {
+      Console.WriteLine("THere is no item that is caled dat");
     }
 
     return null;
@@ -109,24 +120,24 @@ class Player
 
   private void UseKey(string itemName)
   {
-     
+
   }
 
-  private void UseKnife() 
+  private void UseKnife()
   {
     Damage(40);
     Console.WriteLine("You stabed yourself! Seek a medkit fast!");
   }
 
-  private void UseAxe() 
+  private void UseAxe()
   {
     Console.WriteLine("balbalablba");
   }
 
-  private void UseMetkit(string itemName) 
+  private void UseMetkit(string itemName)
   {
     backpack.Get(itemName);
-    Heal(30);
+    Heal(40);
   }
 }
 

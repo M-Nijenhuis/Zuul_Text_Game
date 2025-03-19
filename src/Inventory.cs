@@ -56,6 +56,26 @@ class Inventory
     return total;
   }
 
+  public bool CheckIfItemIsAvailible(string itemName)
+  {
+    string[] oneTimeItems = {"medkit", "entranceKey"};
+
+    foreach (KeyValuePair<string, Item> item in items)
+    {
+      if (item.Key == itemName && oneTimeItems.Contains(itemName))
+      {
+        items.Remove(itemName);
+        return true;
+      }
+      else if (item.Key == itemName)
+      {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
 
   public int GetFreeWeight()
   {
