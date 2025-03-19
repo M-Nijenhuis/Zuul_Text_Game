@@ -80,13 +80,21 @@ class Player
 
     Item item = backpack.Get(itemName);
 
-    if (CurrentRoom.Chest.Put(itemName, item) == true)
+    if (item != null)
     {
-      Console.WriteLine($"The {itemName} is droped in the room");
-      return true;
+      if (CurrentRoom.Chest.Put(itemName, item) == true)
+      {
+        Console.WriteLine($"The {itemName} is droped in the room");
+        return true;
+      }
+    }
+    else
+    {
+      Console.WriteLine($"{itemName} is not in your backpack");
     }
 
     return false;
+
   }
 
   public string Use(string itemName)
