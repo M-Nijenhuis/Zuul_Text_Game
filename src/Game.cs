@@ -28,6 +28,8 @@ class Game
     Room sewer = new Room("in the sewer under the road");
     Room furtherSewer = new Room("futher in the sewer");
 
+    garageHall.isLocked = true;
+
     // Initialise room exits
     outside.AddExit("north", garageHall);
     outside.AddExit("down", sewer);
@@ -56,14 +58,14 @@ class Game
     // Create your Items here
     Item knife = new Item(10, "A very big knife.");
     Item axe = new Item(5, "A very very big axe.");
-    Item entranceKey = new Item(2, "The key for the garage hall");
+    Item key = new Item(2, "A key to open rooms");
     Item storageKey = new Item(2, "The key for the storage room");
     Item medkit = new Item(5, "A medkit to get your health fixed");
 
     // And add them to the Rooms
     sewer.Chest.Put("knife", knife);
     toolsRoom.Chest.Put("axe", axe);
-    outside.Chest.Put("entranceKey", entranceKey);
+    outside.Chest.Put("key", key);
     breakRoom.Chest.Put("storageKey", storageKey);
     breakRoom.Chest.Put("medkit", medkit);
 
@@ -181,9 +183,18 @@ class Game
       return;
     }
 
-    player.CurrentRoom = nextRoom;
-    Console.WriteLine(player.CurrentRoom.GetLongDescription());
-    player.Damage(10);
+    if (nextRoom.isLocked != true)
+    {
+      player.CurrentRoom = nextRoom;
+      Console.WriteLine(player.CurrentRoom.GetLongDescription());
+      player.Damage(10);
+    }
+    else 
+    {
+      Console.ForegroundColor = ConsoleColor.Red;
+      Console.WriteLine("The room you want to enter in locked");
+      Console.ResetColor();
+    }
 
     if(player.health == 30)
     {
@@ -223,9 +234,14 @@ class Game
 
   private void UseItem(Command command)
   {
-    if (command.HasSecondWord()) 
+    if (command.HasSecondWord() && command.HasThirdWord()) 
     {
-      player.Use(command.SecondWord);
+      player.Use(command.SecondWord, command.ThirdWord);
+      Console.WriteLine(command.ThirdWord);
+    }
+    else if (command.HasSecondWord())
+    {
+      player.Use(command.SecondWord, null);
     }
     else 
     {

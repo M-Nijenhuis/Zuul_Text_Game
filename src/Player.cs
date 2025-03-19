@@ -97,7 +97,7 @@ class Player
 
   }
 
-  public string Use(string itemName)
+  public string Use(string itemName, string useDirection)
   {
 
     if(backpack.CheckIfItemIsAvailible(itemName) == true)
@@ -113,9 +113,13 @@ class Player
         case "medkit":
           UseMetkit(itemName);
           return itemName;
-        case "entrancekey":
-          UseKey(itemName);
-          return itemName;
+        case "key":
+          if (useDirection != null)
+          {
+            UseKey(itemName, useDirection);
+            return itemName;
+          }
+          return null;
       }
     }
     else
@@ -126,9 +130,12 @@ class Player
     return null;
   }
 
-  private void UseKey(string itemName)
+  private void UseKey(string itemName, string useDirection)
   {
-
+    backpack.Get(itemName);
+    Room nextRoom = CurrentRoom.GetExit(useDirection);
+    nextRoom.isLocked = false;
+    Console.WriteLine($"Used the key to the {useDirection}");
   }
 
   private void UseKnife()
