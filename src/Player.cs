@@ -119,6 +119,10 @@ class Player
             UseKey(itemName, useDirection);
             return itemName;
           }
+          else
+          {
+            Console.WriteLine("what direction");
+          }
           return null;
       }
     }
@@ -132,10 +136,25 @@ class Player
 
   private void UseKey(string itemName, string useDirection)
   {
-    backpack.Get(itemName);
     Room nextRoom = CurrentRoom.GetExit(useDirection);
-    nextRoom.isLocked = false;
-    Console.WriteLine($"Used the key to the {useDirection}");
+    if (nextRoom != null && nextRoom.isLocked == false)
+    {
+      Console.ForegroundColor = ConsoleColor.Red;
+      Console.WriteLine("That room is not locked");
+      Console.ResetColor();
+    }
+    else if (nextRoom != null)
+    {
+      backpack.Get(itemName);
+      nextRoom.isLocked = false;
+      Console.WriteLine($"Used the key to the {useDirection}");
+    }
+    else
+    {
+      Console.ForegroundColor = ConsoleColor.Red;
+      Console.WriteLine("There is no room in that direction");
+      Console.ResetColor();
+    }
   }
 
   private void UseKnife()
