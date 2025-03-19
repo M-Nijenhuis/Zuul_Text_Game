@@ -27,8 +27,10 @@ class Game
     Room garage = new Room("in the garage");
     Room sewer = new Room("in the sewer under the road");
     Room furtherSewer = new Room("futher in the sewer");
+    Room tyreRoom = new Room("in the tyre room");
 
     garageHall.isLocked = true;
+    toolsRoom.isLocked = true;
 
     // Initialise room exits
     outside.AddExit("north", garageHall);
@@ -52,22 +54,24 @@ class Game
     garage.AddExit("east", storageRoom);
 
     toolsRoom.AddExit("east", garage);
+    toolsRoom.AddExit("up", tyreRoom);
     storageRoom.AddExit("west", garage);
 
+    tyreRoom.AddExit("down", toolsRoom);
 
     // Create your Items here
     Item knife = new Item(10, "A very big knife.");
     Item axe = new Item(5, "A very very big axe.");
     Item key = new Item(2, "A key to open rooms");
-    Item storageKey = new Item(2, "The key for the storage room");
     Item medkit = new Item(5, "A medkit to get your health fixed");
 
     // And add them to the Rooms
     sewer.Chest.Put("knife", knife);
     toolsRoom.Chest.Put("axe", axe);
     outside.Chest.Put("key", key);
-    breakRoom.Chest.Put("storageKey", storageKey);
+    breakRoom.Chest.Put("key", key);
     breakRoom.Chest.Put("medkit", medkit);
+    tyreRoom.Chest.Put("medkit", medkit);
 
     // Start game outside
     player.CurrentRoom = outside;
@@ -96,7 +100,7 @@ class Game
   {
     Console.WriteLine();
     Console.WriteLine("Welcome to Zuul!");
-    Console.WriteLine("Zuul is a new, incredibly boring adventure game.");
+    Console.WriteLine("Zuul is a new, incredibly !boring adventure game.");
     Console.WriteLine("Type 'help' if you need help.");
     Console.WriteLine();
     Console.WriteLine(player.CurrentRoom.GetLongDescription());
@@ -155,7 +159,7 @@ class Game
   private void PrintHelp()
   {
     Console.WriteLine("You are lost. You are alone.");
-    Console.WriteLine("You wander around at the university.");
+    Console.WriteLine("You wander around at a garage.");
     Console.WriteLine();
     // let the parser print the commands
     parser.PrintValidCommands();
@@ -186,7 +190,9 @@ class Game
     if (nextRoom.isLocked != true)
     {
       player.CurrentRoom = nextRoom;
+      Console.ForegroundColor = ConsoleColor.Cyan;
       Console.WriteLine(player.CurrentRoom.GetLongDescription());
+      Console.ResetColor();
       player.Damage(10);
     }
     else 
