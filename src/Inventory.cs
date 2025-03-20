@@ -42,19 +42,6 @@ class Inventory
     return null;
   }
 
-  public int GetTotalWeight()
-  {
-    int total = 0;
-
-    foreach (KeyValuePair<string, Item> item in items)
-    {
-      int itemWeight = item.Value.Weight;
-      total += itemWeight;
-      itemWeight = 0;
-    }
-
-    return total;
-  }
 
   public bool CheckIfItemIsAvailible(string itemName)
   {
@@ -76,6 +63,20 @@ class Inventory
     return false;
   }
 
+
+  public int GetTotalWeight()
+  {
+    int total = 0;
+
+    foreach (KeyValuePair<string, Item> item in items)
+    {
+      int itemWeight = item.Value.Weight;
+      total += itemWeight;
+      itemWeight = 0;
+    }
+
+    return total;
+  }
 
   public int GetFreeWeight()
   {

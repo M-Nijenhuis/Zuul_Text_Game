@@ -28,9 +28,12 @@ class Game
     Room sewer = new Room("in the sewer under the road");
     Room furtherSewer = new Room("futher in the sewer");
     Room tyreRoom = new Room("in the tyre room");
+    Room basement = new Room("in the secret basement");
+    Room office = new Room ("in the boss his office");
 
     garageHall.isLocked = true;
     toolsRoom.isLocked = true;
+    basement.isLocked = true;
 
     // Initialise room exits
     outside.AddExit("north", garageHall);
@@ -52,10 +55,16 @@ class Game
     garage.AddExit("south", garageHall);
     garage.AddExit("west", toolsRoom);
     garage.AddExit("east", storageRoom);
+    garage.AddExit("up", office);
 
     toolsRoom.AddExit("east", garage);
     toolsRoom.AddExit("up", tyreRoom);
     storageRoom.AddExit("west", garage);
+    storageRoom.AddExit("down", basement);
+
+    basement.AddExit("up", storageRoom);
+
+    office.AddExit("down", garage);
 
     tyreRoom.AddExit("down", toolsRoom);
 
@@ -69,9 +78,10 @@ class Game
     sewer.Chest.Put("knife", knife);
     toolsRoom.Chest.Put("axe", axe);
     outside.Chest.Put("key", key);
-    breakRoom.Chest.Put("key", key);
+    smallOffice.Chest.Put("key", key);
     breakRoom.Chest.Put("medkit", medkit);
     tyreRoom.Chest.Put("medkit", medkit);
+    office.Chest.Put("key", key);
 
     // Start game outside
     player.CurrentRoom = outside;
@@ -243,7 +253,6 @@ class Game
     if (command.HasSecondWord() && command.HasThirdWord()) 
     {
       player.Use(command.SecondWord, command.ThirdWord);
-      Console.WriteLine(command.ThirdWord);
     }
     else if (command.HasSecondWord())
     {
@@ -264,7 +273,14 @@ class Game
     Console.WriteLine("----------------------");
 
     Console.ForegroundColor = ConsoleColor.Blue;
-    Console.WriteLine("This items are in the room: " + string.Join(", ", player.CurrentRoom.Chest.ListItems()));
+    if (player.CurrentRoom.Chest.ListItems().Count != 0)
+    {
+      Console.WriteLine("This items are in the room: " + string.Join(", ", player.CurrentRoom.Chest.ListItems()));
+    }
+    else 
+    {
+      Console.WriteLine("There are no items in this room");
+    }
     Console.ResetColor();
   }
 
@@ -275,6 +291,7 @@ class Game
     Console.ForegroundColor = ConsoleColor.White;
     Console.WriteLine("----------------------");
     Console.ForegroundColor = ConsoleColor.Blue;
+    Console.WriteLine($"You have used {player.backpack.GetTotalWeight()}/25 of you capacity");
     Console.WriteLine("Your inventory: " + string.Join(", ", player.backpack.ListItems()));
     Console.ResetColor();
   }
