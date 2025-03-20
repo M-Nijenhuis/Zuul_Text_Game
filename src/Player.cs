@@ -4,7 +4,7 @@ class Player
 
   //Private fields
   private const int _maxHealth = 100;
-  public Inventory backpack;
+  public Inventory backpack { get; set; }
 
   //Public Fields
   public int health;
