@@ -42,6 +42,19 @@ class Inventory
     return null;
   }
 
+  public bool CheckIfItemIsInInventory(string itemName)
+  {
+    foreach (KeyValuePair<string, Item> item in items)
+    {
+      if (item.Key == itemName)
+      {
+        return true;
+      }
+    }
+
+    return false;
+
+  }
 
   public bool CheckIfItemIsAvailible(string itemName)
   {

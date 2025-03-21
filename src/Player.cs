@@ -54,7 +54,11 @@ class Player
 
     if (item != null)
     {
-      if (backpack.Put(itemName, item) == true)
+      if (backpack.CheckIfItemIsInInventory(itemName) == true)
+      {
+        Console.WriteLine("You can only have 1 of these items in your backpack");
+      }
+      else if (backpack.Put(itemName, item) == true)
       {
         Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine($"The {itemName} is put in to your backpack.");
