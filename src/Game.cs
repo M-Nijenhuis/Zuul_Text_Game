@@ -5,6 +5,7 @@ class Game
   // Private fields
   private Parser parser;
   private Player player;
+  private const string _winKey = "winkey";
 
   // Constructor
   public Game()
@@ -73,6 +74,7 @@ class Game
     Item axe = new Item(5, "A very very big axe.");
     Item key = new Item(2, "A key to open rooms");
     Item medkit = new Item(5, "A medkit to get your health fixed");
+    Item winKey = new Item(1, "The end");
 
     // And add them to the Rooms
     sewer.Chest.Put("knife", knife);
@@ -82,6 +84,9 @@ class Game
     breakRoom.Chest.Put("medkit", medkit);
     tyreRoom.Chest.Put("medkit", medkit);
     office.Chest.Put("key", key);
+    office.Chest.Put("medkit", medkit);
+
+    basement.Chest.Put(_winKey, winKey);
 
     // Start game outside
     player.CurrentRoom = outside;
@@ -91,10 +96,10 @@ class Game
   public void Play()
   {
     PrintWelcome();
+    bool finished = false;
 
     // Enter the main command loop. Here we repeatedly read commands and
     // execute them until the player wants to quit.
-    bool finished = false;
     while (!finished && player.IsAlive() == true) 
     {
       Command command = parser.GetCommand();
@@ -147,7 +152,7 @@ class Game
         Status();
         break;
       case "take":
-        Take(command);
+        wantToQuit = Take(command);
         break;
       case "drop":
         Drop(command);
@@ -220,18 +225,27 @@ class Game
     }
   }
 
-  private void Take(Command command)
+  private bool Take(Command command)
   {
     if(!command.HasSecondWord()) 
     {
       Console.WriteLine("What item?");
+      return false;
     }
     else
     {
       string itemName = command.SecondWord;
       player.TakeFromChest(itemName);
+      if (itemName == _winKey)
+      {
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.WriteLine("Amazing you won the game!");
+        Console.ResetColor();
+        return true;
+      }
     }
 
+    return false;
   }
 
   private void Drop(Command command)
@@ -296,5 +310,3 @@ class Game
     Console.ResetColor();
   }
 }
-
-
