@@ -74,10 +74,12 @@ class Game
     Item axe = new Item(5, "A very very big axe.");
     Item key = new Item(2, "A key to open rooms");
     Item medkit = new Item(5, "A medkit to get your health fixed");
+    Item whisky = new Item(7, "A drink that will make you happy and fix your healht");
     Item winKey = new Item(1, "The end");
 
     // And add them to the Rooms
     sewer.Chest.Put("knife", knife);
+    furtherSewer.Chest.Put("whisky", whisky);
     toolsRoom.Chest.Put("axe", axe);
     outside.Chest.Put("key", key);
     smallOffice.Chest.Put("key", key);

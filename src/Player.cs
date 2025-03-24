@@ -117,6 +117,9 @@ class Player
         case "medkit":
           UseMetkit(itemName);
           return itemName;
+        case "whisky":
+          UseWhisky(itemName);
+          return itemName;
         case "key":
           if (useDirection != null)
           {
@@ -176,5 +179,14 @@ class Player
   {
     backpack.Get(itemName);
     Heal(40);
+  }
+
+  private void UseWhisky(string itemName)
+  {
+    backpack.Get(itemName);
+    Console.ForegroundColor = ConsoleColor.Yellow;
+    Console.WriteLine("You feel very happy now!");
+    Console.ResetColor();
+    Heal(100);
   }
 }
