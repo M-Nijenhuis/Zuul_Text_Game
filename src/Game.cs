@@ -72,7 +72,7 @@ class Game
     // Create your Items here
     Item knife = new Item(10, "A very big knife.");
     Item axe = new Item(5, "A very very big axe.");
-    Item key = new Item(2, "A key to open rooms");
+    Item key = new Item(10, "A key to open rooms");
     Item medkit = new Item(5, "A medkit to get your health fixed");
     Item whisky = new Item(7, "A drink that will make you happy and fix your healht");
     Item winKey = new Item(1, "The end");
@@ -88,6 +88,7 @@ class Game
     office.Chest.Put("key", key);
     office.Chest.Put("medkit", medkit);
 
+    //The win key in the basement
     basement.Chest.Put(_winKey, winKey);
 
     // Start game outside
@@ -236,6 +237,7 @@ class Game
     }
     else
     {
+      // If the player takes the end key then the game ends
       string itemName = command.SecondWord;
       player.TakeFromChest(itemName);
       if (itemName == _winKey)
@@ -307,7 +309,7 @@ class Game
     Console.ForegroundColor = ConsoleColor.White;
     Console.WriteLine("----------------------");
     Console.ForegroundColor = ConsoleColor.Blue;
-    Console.WriteLine($"You have used {player.backpack.GetTotalWeight()}/25 of you capacity");
+    Console.WriteLine($"You have used {player.backpack.GetTotalWeight()}/{player.backpackSpace} of you capacity");
     Console.WriteLine("Your inventory: " + string.Join(", ", player.backpack.ListItems()));
     Console.ResetColor();
   }
