@@ -4,6 +4,7 @@ class Player
 
   //Private fields
   private const int _maxHealth = 100;
+  public int backpackSpace { get; private set; }
   public Inventory backpack { get; set; }
 
   //Public Fields
@@ -15,7 +16,8 @@ class Player
     CurrentRoom = null;
     health = 100;
 
-    backpack = new Inventory(25);
+    backpackSpace = 20;
+    backpack = new Inventory(backpackSpace);
   }
 
 
@@ -67,7 +69,9 @@ class Player
       }
 
       CurrentRoom.Chest.Put(itemName, item);
+      Console.ForegroundColor = ConsoleColor.Red;
       Console.WriteLine($"The {itemName} does not fit in your backpack.");
+      Console.ResetColor();
     }
     else
     {
@@ -81,10 +85,14 @@ class Player
 
   public bool DropToChest(string itemName)
   {
-
     Item item = backpack.Get(itemName);
-
-    if (item != null)
+    if (CurrentRoom.Chest.CheckIfItemIsAvailible(itemName))
+    {
+      Console.ForegroundColor = ConsoleColor.Red;
+      Console.WriteLine("This item cannot be droped in this room");
+      Console.ResetColor();
+    }
+    else if (item != null)
     {
       if (CurrentRoom.Chest.Put(itemName, item) == true)
       {

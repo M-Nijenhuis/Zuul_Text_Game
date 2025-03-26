@@ -81,11 +81,9 @@ class Inventory
   {
     int total = 0;
 
-    foreach (KeyValuePair<string, Item> item in items)
+    foreach(Item item in items.Values)
     {
-      int itemWeight = item.Value.Weight;
-      total += itemWeight;
-      itemWeight = 0;
+      total += item.Weight;
     }
 
     return total;
@@ -93,7 +91,7 @@ class Inventory
 
   public int GetFreeWeight()
   {
-    return maxWeight -= GetTotalWeight();
+    return maxWeight - GetTotalWeight();
   }
 
   public List<string> ListItems()
