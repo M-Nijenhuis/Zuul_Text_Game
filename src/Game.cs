@@ -5,7 +5,10 @@ class Game
   // Private fields
   private Parser parser;
   private Player player;
-  private const string _winKey = "winkey";
+
+  private bool gameIsEnded = false;
+
+  private Room endRoom = new Room("in the end Room");
 
   // Constructor
   public Game()
@@ -35,6 +38,7 @@ class Game
     garageHall.isLocked = true;
     toolsRoom.isLocked = true;
     basement.isLocked = true;
+    endRoom.isLocked = true;
 
     // Initialise room exits
     outside.AddExit("north", garageHall);
@@ -61,9 +65,9 @@ class Game
     toolsRoom.AddExit("east", garage);
     toolsRoom.AddExit("up", tyreRoom);
     storageRoom.AddExit("west", garage);
-    storageRoom.AddExit("down", basement);
+    storageRoom.AddExit("down", endRoom);
 
-    basement.AddExit("up", storageRoom);
+    endRoom.AddExit("up", storageRoom);
 
     office.AddExit("down", garage);
 
@@ -72,10 +76,10 @@ class Game
     // Create your Items here
     Item knife = new Item(10, "A very big knife.");
     Item axe = new Item(5, "A very very big axe.");
-    Item key = new Item(10, "A key to open rooms");
+    Item key = new Item(5, "A key to open rooms");
     Item medkit = new Item(5, "A medkit to get your health fixed");
     Item whisky = new Item(7, "A drink that will make you happy and fix your healht");
-    Item winKey = new Item(1, "The end");
+    Item endRoomKey = new Item(5, "The key to open the end room");
 
     // And add them to the Rooms
     sewer.Chest.Put("knife", knife);
@@ -85,11 +89,8 @@ class Game
     smallOffice.Chest.Put("key", key);
     breakRoom.Chest.Put("medkit", medkit);
     tyreRoom.Chest.Put("medkit", medkit);
-    office.Chest.Put("key", key);
+    office.Chest.Put("end-key", endRoomKey);
     office.Chest.Put("medkit", medkit);
-
-    //The win key in the basement
-    basement.Chest.Put(_winKey, winKey);
 
     // Start game outside
     player.CurrentRoom = outside;
@@ -144,6 +145,7 @@ class Game
         break;
       case "go":
         GoRoom(command);
+        wantToQuit = gameIsEnded;
         break;
       case "quit":
         wantToQuit = true;
@@ -155,7 +157,7 @@ class Game
         Status();
         break;
       case "take":
-        wantToQuit = Take(command);
+        Take(command);
         break;
       case "drop":
         Drop(command);
@@ -205,7 +207,14 @@ class Game
       return;
     }
 
-    if (nextRoom.isLocked != true)
+    if(nextRoom == endRoom && endRoom.isLocked == false)
+    {
+      gameIsEnded = true;
+      Console.ForegroundColor = ConsoleColor.Yellow;
+      Console.WriteLine("Amazing you won the game!");
+      Console.ResetColor();
+    }
+    else if (nextRoom.isLocked != true)
     {
       player.CurrentRoom = nextRoom;
       Console.ForegroundColor = ConsoleColor.Cyan;
@@ -228,28 +237,18 @@ class Game
     }
   }
 
-  private bool Take(Command command)
+  private void Take(Command command)
   {
     if(!command.HasSecondWord()) 
     {
       Console.WriteLine("What item?");
-      return false;
     }
     else
     {
       // If the player takes the end key then the game ends
       string itemName = command.SecondWord;
       player.TakeFromChest(itemName);
-      if (itemName == _winKey)
-      {
-        Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.WriteLine("Amazing you won the game!");
-        Console.ResetColor();
-        return true;
-      }
     }
-
-    return false;
   }
 
   private void Drop(Command command)

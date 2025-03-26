@@ -162,7 +162,9 @@ class Player
     {
       backpack.Get(itemName);
       nextRoom.isLocked = false;
+      Console.ForegroundColor = ConsoleColor.Yellow;
       Console.WriteLine($"Used the key to the {useDirection}");
+      Console.ResetColor();
     }
     else
     {
@@ -198,3 +200,13 @@ class Player
     Heal(100);
   }
 }
+
+
+
+
+
+
+
+
+
+
