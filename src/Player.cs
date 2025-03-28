@@ -7,6 +7,7 @@ class Player
   public int backpackSpace { get; private set; }
   public Inventory backpack { get; set; }
 
+
   //Public Fields
   public int health;
 
@@ -109,7 +110,7 @@ class Player
 
   }
 
-  public string Use(string itemName, string useDirection)
+  public string Use(string itemName, string useDirection, Room endRoom)
   {
 
     if(backpack.CheckIfItemIsAvailible(itemName) == true)
@@ -131,7 +132,18 @@ class Player
         case "key":
           if (useDirection != null)
           {
-            UseKey(itemName, useDirection);
+            UseKey(itemName, useDirection, endRoom);
+            return itemName;
+          }
+          else
+          {
+            Console.WriteLine("what direction");
+          }
+          return null;
+        case "end-key":
+          if (useDirection != null)
+          {
+            UseEndRoomKey(itemName, useDirection, endRoom);
             return itemName;
           }
           else
@@ -143,16 +155,24 @@ class Player
     }
     else
     {
-      Console.WriteLine("THere is no item that is caled dat");
+      Console.ForegroundColor = ConsoleColor.Red;
+      Console.WriteLine($"There is no item in your inventory that is named {itemName}");
+      Console.ResetColor();
     }
 
     return null;
   }
 
-  private void UseKey(string itemName, string useDirection)
+  private void UseKey(string itemName, string useDirection, Room endRoom)
   {
     Room nextRoom = CurrentRoom.GetExit(useDirection);
-    if (nextRoom != null && nextRoom.isLocked == false)
+    if (nextRoom == endRoom)
+    {
+      Console.ForegroundColor = ConsoleColor.Red;
+      Console.WriteLine("You cant use the key on that room");
+      Console.ResetColor();
+    }
+    else if (nextRoom != null && nextRoom.isLocked == false)
     {
       Console.ForegroundColor = ConsoleColor.Red;
       Console.WriteLine("That room is not locked");
@@ -171,6 +191,35 @@ class Player
       Console.ForegroundColor = ConsoleColor.Red;
       Console.WriteLine("There is no room in that direction");
       Console.ResetColor();
+    }
+  }
+
+  private void UseEndRoomKey(string itemName, string useDirection, Room endRoom)
+  {
+    Room nextRoom = CurrentRoom.GetExit(useDirection);
+
+    if (nextRoom != null)
+    {
+      if (nextRoom != endRoom)
+      {
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine("You cannot use the key on that room");
+        Console.ResetColor();
+      }
+      else if (nextRoom == endRoom && endRoom.isLocked == true)
+      {
+        backpack.Get(itemName);
+        nextRoom.isLocked = false;
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.WriteLine($"Used the key to the {useDirection}");
+        Console.ResetColor();
+      }
+    }
+    else 
+    {
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine("There is no room in that direction");
+        Console.ResetColor();
     }
   }
 

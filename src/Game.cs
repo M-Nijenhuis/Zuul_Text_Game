@@ -8,11 +8,12 @@ class Game
 
   private bool gameIsEnded = false;
 
-  private Room endRoom = new Room("in the end Room");
+  public Room endRoom { get; private set; }
 
   // Constructor
   public Game()
   {
+    endRoom = new Room("in the end room");
     parser = new Parser();
     player = new Player();
     CreateRooms();
@@ -121,6 +122,7 @@ class Game
     Console.WriteLine("Welcome to Zuul!");
     Console.WriteLine("Zuul is a new, incredibly !boring adventure game.");
     Console.WriteLine("Type 'help' if you need help.");
+    Console.WriteLine("Your goal is to find the endroom and survive. Use health items to stay alive");
     Console.WriteLine();
     Console.WriteLine(player.CurrentRoom.GetLongDescription());
   }
@@ -269,11 +271,11 @@ class Game
   {
     if (command.HasSecondWord() && command.HasThirdWord()) 
     {
-      player.Use(command.SecondWord, command.ThirdWord);
+      player.Use(command.SecondWord, command.ThirdWord, endRoom);
     }
     else if (command.HasSecondWord())
     {
-      player.Use(command.SecondWord, null);
+      player.Use(command.SecondWord, null, endRoom);
     }
     else 
     {
