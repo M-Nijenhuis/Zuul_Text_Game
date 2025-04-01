@@ -8,12 +8,12 @@ class Game
 
   private bool gameIsEnded = false;
 
-  public Room endRoom { get; private set; }
+  public Room EndRoom { get; private set; }
 
   // Constructor
   public Game()
   {
-    endRoom = new Room("in the end room");
+    EndRoom = new Room("in the end room");
     parser = new Parser();
     player = new Player();
     CreateRooms();
@@ -39,7 +39,10 @@ class Game
     garageHall.isLocked = true;
     toolsRoom.isLocked = true;
     basement.isLocked = true;
-    endRoom.isLocked = true;
+    EndRoom.isLocked = true;
+
+    //Set the endRoom as endroom true
+    EndRoom.isEndroom = true;
 
     // Initialise room exits
     outside.AddExit("north", garageHall);
@@ -66,9 +69,9 @@ class Game
     toolsRoom.AddExit("east", garage);
     toolsRoom.AddExit("up", tyreRoom);
     storageRoom.AddExit("west", garage);
-    storageRoom.AddExit("down", endRoom);
+    storageRoom.AddExit("down", EndRoom);
 
-    endRoom.AddExit("up", storageRoom);
+    EndRoom.AddExit("up", storageRoom);
 
     office.AddExit("down", garage);
 
@@ -100,12 +103,12 @@ class Game
   //  Main play routine. Loops until end of play.
   public void Play()
   {
-    PrintWelcome();
     bool finished = false;
+    PrintWelcome();
 
     // Enter the main command loop. Here we repeatedly read commands and
     // execute them until the player wants to quit.
-    while (!finished && player.IsAlive() == true) 
+    while (!finished && player.IsAlive()) 
     {
       Command command = parser.GetCommand();
       finished = ProcessCommand(command);
@@ -209,14 +212,14 @@ class Game
       return;
     }
 
-    if(nextRoom == endRoom && endRoom.isLocked == false)
+    if(nextRoom == EndRoom && EndRoom.isLocked == false)
     {
       gameIsEnded = true;
       Console.ForegroundColor = ConsoleColor.Yellow;
       Console.WriteLine("Amazing you won the game!");
       Console.ResetColor();
     }
-    else if (nextRoom.isLocked != true)
+    else if (nextRoom.isLocked == false)
     {
       player.CurrentRoom = nextRoom;
       Console.ForegroundColor = ConsoleColor.Cyan;
@@ -271,11 +274,11 @@ class Game
   {
     if (command.HasSecondWord() && command.HasThirdWord()) 
     {
-      player.Use(command.SecondWord, command.ThirdWord, endRoom);
+      player.Use(command.SecondWord, command.ThirdWord);
     }
     else if (command.HasSecondWord())
     {
-      player.Use(command.SecondWord, null, endRoom);
+      player.Use(command.SecondWord, null);
     }
     else 
     {
@@ -310,8 +313,8 @@ class Game
     Console.ForegroundColor = ConsoleColor.White;
     Console.WriteLine("----------------------");
     Console.ForegroundColor = ConsoleColor.Blue;
-    Console.WriteLine($"You have used {player.backpack.GetTotalWeight()}/{player.backpackSpace} of you capacity");
-    Console.WriteLine("Your inventory: " + string.Join(", ", player.backpack.ListItems()));
+    Console.WriteLine($"You have used {player.Backpack.GetTotalWeight()}/{player.BackpackSpace} of you capacity");
+    Console.WriteLine("Your inventory: " + string.Join(", ", player.Backpack.ListItems()));
     Console.ResetColor();
   }
 }

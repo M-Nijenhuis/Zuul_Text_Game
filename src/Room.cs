@@ -8,6 +8,7 @@ class Room
   private Inventory chest;
   
   public bool isLocked = false;
+  public bool isEndroom = false;
 
 	// Create a room described "description". Initially, it has no exits.
 	// "description" is something like "in a kitchen" or "in a court yard".

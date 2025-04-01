@@ -30,16 +30,14 @@ class Inventory
 
   public Item Get(string itemName)
   {
-    foreach (KeyValuePair<string, Item> item in items)
+    if (!items.ContainsKey(itemName))
     {
-      if (item.Key == itemName)
-      {
-        items.Remove(itemName);
-        return item.Value;
-      }
+      return null;
     }
 
-    return null;
+    Item item = items[itemName];
+    items.Remove(itemName);
+    return item;
   }
 
   public bool CheckIfItemIsInInventory(string itemName)
